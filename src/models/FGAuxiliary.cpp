@@ -47,6 +47,9 @@ INCLUDES
 #include "FGFDMExec.h"
 #include "input_output/FGPropertyManager.h"
 
+//awesome tether
+#include "FGInertial.h"
+
 using namespace std;
 
 namespace JSBSim {
@@ -377,8 +380,36 @@ void FGAuxiliary::bind(void)
   PropertyManager->Tie("position/vrp-gc-latitude_deg", &vLocationVRP, &FGLocation::GetLatitudeDeg);
   PropertyManager->Tie("position/vrp-longitude_deg", &vLocationVRP, &FGLocation::GetLongitudeDeg);
   PropertyManager->Tie("position/vrp-radius-ft", &vLocationVRP, &FGLocation::GetRadius);
+
+  //awesome tether
+  PropertyManager->Tie("position/tether-strength", this, &FGAuxiliary::GetTetherForce );
+
 }
 
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//awesome tether
+
+void FGAuxiliary::CalculateRelativePosition(void)
+{
+  const double earth_radius_mt = Inertial->GetRefRadius()*fttom;
+  lat_relative_position=(FDMExec->GetPropagate()->GetLatitude()  - FDMExec->GetIC()->GetLatitudeDegIC() *degtorad)*earth_radius_mt;
+  lon_relative_position=(FDMExec->GetPropagate()->GetLongitude() - FDMExec->GetIC()->GetLongitudeDegIC()*degtorad)*earth_radius_mt*cosf(FDMExec->GetPropagate()->GetLatitude());
+  relative_position = sqrt(lat_relative_position*lat_relative_position + lon_relative_position*lon_relative_position);
+
+  alt_agl = FDMExec->GetPropagate()->GetDistanceAGL()*0.3048; //feet to meter
+  distance = sqrt(relative_position*relative_position + alt_agl*alt_agl);
+
+  if (distance > 390){
+      tether_strength = -2.0;
+  } else {
+	tether_strength = 0.0;
+  }
+//  cout << "horiz. distance: " << relative_position << endl;
+//  cout << "altitude: " << alt_agl << endl;
+//  cout << "distance: " << distance << endl;
+//  cout << "tether strength: " << tether_strength << endl;
+};
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 double FGAuxiliary::BadUnits(void) const

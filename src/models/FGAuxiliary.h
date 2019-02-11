@@ -246,6 +246,9 @@ public:
   double GetLatitudeRelativePosition  (void) const;
   double GetDistanceRelativePosition  (void) const;
 
+  //awesome tether
+  double GetTetherForce (void) const {return tether_strength;}
+
   void SetAeroPQR(const FGColumnVector3& tt) { vAeroPQR = tt; }
 
   struct Inputs {
@@ -315,7 +318,16 @@ private:
 
   void UpdateWindMatrices(void);
 
+  //awesome tether
   void CalculateRelativePosition(void);
+  double tether_strength;
+  double lon_relative_position;
+  double lat_relative_position;
+  double relative_position;
+
+  double alt_agl;
+  double distance;
+
 
   void bind(void);
   double BadUnits(void) const;

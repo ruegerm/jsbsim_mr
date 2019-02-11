@@ -53,6 +53,10 @@ class FGFDMExec;
 class Element;
 class FGPropertyManager;
 
+//awesome tether
+
+class FGInertial;
+
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 CLASS DOCUMENTATION
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
@@ -112,6 +116,9 @@ protected:
 
   FGFDMExec*         FDMExec;
   FGPropertyManager* PropertyManager;
+
+//awesome tether
+  FGInertial*        Inertial;
 };
 }
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
