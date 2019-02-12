@@ -89,6 +89,14 @@ FGPropertyVector3::FGPropertyVector3(FGPropertyManager* pm,
 FGParameter* FGExternalForce::bind(Element *el, const string& magName,
                                    FGPropertyVector3& v)
 {
+
+  // awesome tether force
+  Element* xdirection_element=0;
+  Element* ydirection_element=0;
+  Element* zdirection_element=0;
+//  fdmexec = fdmex;
+
+  std::cout<<"/n/n/n/n/n/n/n/n"<<fdmexec<<std::endl;
   // Set frame (from FGForce).
   string sFrame = el->GetAttributeValue("frame");
   if (sFrame.empty()) {
@@ -111,17 +119,48 @@ FGParameter* FGExternalForce::bind(Element *el, const string& magName,
     ttype = tNone;
   }
 
-  Element* direction_element = el->FindElement("direction");
-  if (!direction_element) {
-    cerr << el->ReadFrom()
-         << "No direction element specified in " << el->GetName()
-         << " object. Default is (0,0,0)." << endl;
+//  Element* direction_element = el->FindElement("direction");
+//  if (!direction_element) {
+//    cerr << el->ReadFrom()
+//         << "No direction element specified in " << el->GetName()
+//         << " object. Default is (0,0,0)." << endl;
+//  } else {
+//    FGColumnVector3 direction = direction_element->FindElementTripletConvertTo("IN");
+//    direction.Normalize();
+//    v = direction;
+//  }
+
+
+  // awesome tether force
+
+  // specify direction of tether force
+  xdirection_element = el->FindElement("xdirection");
+  if (!xdirection_element) {
+    cerr << "No direction element specified in force object. Default is (0,0,0)." << endl;
   } else {
-    FGColumnVector3 direction = direction_element->FindElementTripletConvertTo("IN");
-    direction.Normalize();
-    v = direction;
+    //PropertyManager->Tie( BasePropertyName + "/x",(FGExternalForce*)this, &FGExternalForce::GetX, &FGExternalForce::SetX);
+    xDirection_Function = new FGFunction(fdmexec, xdirection_element);
+    //vDirection(eX) = xDirection_Function->GetValue();
   }
 
+  ydirection_element = el->FindElement("ydirection");
+  if (!ydirection_element) {
+    cerr << "No direction element specified in force object. Default is (0,0,0)." << endl;
+  } else {
+    //PropertyManager->Tie( BasePropertyName + "/y",(FGExternalForce*)this, &FGExternalForce::GetY, &FGExternalForce::SetY);
+    yDirection_Function = new FGFunction(fdmexec, ydirection_element);
+	//vDirection(eY) = yDirection_Function->GetValue();
+  }
+
+  zdirection_element = el->FindElement("zdirection");
+  if (!zdirection_element) {
+    cerr << "No direction element specified in force object. Default is (0,0,0)." << endl;
+  } else {
+    //PropertyManager->Tie( BasePropertyName + "/z",(FGExternalForce*)this, &FGExternalForce::GetZ, &FGExternalForce::SetZ);
+    zDirection_Function = new FGFunction(fdmexec, zdirection_element);
+    //vDirection(eZ) = zDirection_Function->GetValue()*(-1);
+//    cout << "z direction" << vDirection(eZ) << endl;
+  }
   // The value sent to the sim through the external_reactions/{force
   // name}/magnitude property will be multiplied against the unit vector, which
   // can come in initially in the direction vector. The frame in which the

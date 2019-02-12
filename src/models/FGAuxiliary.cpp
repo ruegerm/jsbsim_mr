@@ -388,13 +388,15 @@ void FGAuxiliary::bind(void)
 
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//awesome tether
+//awesome tether force
 
 void FGAuxiliary::CalculateRelativePosition(void)
 {
+
   const double earth_radius_mt = Inertial->GetRefRadius()*fttom;
   lat_relative_position=(FDMExec->GetPropagate()->GetLatitude()  - FDMExec->GetIC()->GetLatitudeDegIC() *degtorad)*earth_radius_mt;
   lon_relative_position=(FDMExec->GetPropagate()->GetLongitude() - FDMExec->GetIC()->GetLongitudeDegIC()*degtorad)*earth_radius_mt*cosf(FDMExec->GetPropagate()->GetLatitude());
+
   relative_position = sqrt(lat_relative_position*lat_relative_position + lon_relative_position*lon_relative_position);
 
   alt_agl = FDMExec->GetPropagate()->GetDistanceAGL()*0.3048; //feet to meter

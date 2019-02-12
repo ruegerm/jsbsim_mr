@@ -42,6 +42,9 @@ INCLUDES
 #include "models/propulsion/FGForce.h"
 #include "simgear/props/propertyObject.hxx"
 
+//awesome tether force
+#include "math/FGFunction.h"
+#include "FGFDMExec.h"
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 FORWARD DECLARATIONS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
@@ -214,7 +217,10 @@ public:
   */
   explicit FGExternalForce(FGFDMExec *FDMExec)
     : FGForce(FDMExec), forceMagnitude(NULL), momentMagnitude(NULL)
-  { Debug(0); }
+  { Debug(0);
+  //awesome tether force
+  fdmexec=FDMExec;
+  }
 
   /** Copy Constructor
       @param extForce a reference to an existing FGExternalForce object
@@ -235,6 +241,13 @@ private:
   std::string Name;
   FGParameter *forceMagnitude, *momentMagnitude;
   FGPropertyVector3 forceDirection, momentDirection;
+
+  //awesome tether force
+  FGFunction* xDirection_Function;
+  FGFunction* yDirection_Function;
+  FGFunction* zDirection_Function;
+  FGFDMExec* fdmexec;
+
   void Debug(int from);
 };
 }
