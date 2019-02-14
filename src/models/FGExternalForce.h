@@ -218,8 +218,7 @@ public:
   explicit FGExternalForce(FGFDMExec *FDMExec)
     : FGForce(FDMExec), forceMagnitude(NULL), momentMagnitude(NULL)
   { Debug(0);
-  //awesome tether force
-  fdmexec=FDMExec;
+
   }
 
   /** Copy Constructor
@@ -246,7 +245,7 @@ private:
   FGFunction* xDirection_Function;
   FGFunction* yDirection_Function;
   FGFunction* zDirection_Function;
-  FGFDMExec* fdmexec;
+  FGPropertyManager* PropertyManager;
 
   void Debug(int from);
 };

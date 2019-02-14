@@ -233,6 +233,9 @@ bool FGAuxiliary::Run(bool Holding)
   FGColumnVector3 vMac = in.Tb2l * in.RPBody;
   hoverbmac = (in.DistanceAGL + vMac(3)) / in.Wingspan;
 
+  //Awesome tether force
+  CalculateRelativePosition();
+
   return false;
 }
 
@@ -383,7 +386,7 @@ void FGAuxiliary::bind(void)
 
   //awesome tether
   PropertyManager->Tie("position/tether-strength", this, &FGAuxiliary::GetTetherForce );
-
+  PropertyManager->Tie("position/distance3d", this, &FGAuxiliary::GetDistance3D );
 }
 
 
@@ -402,8 +405,8 @@ void FGAuxiliary::CalculateRelativePosition(void)
   alt_agl = FDMExec->GetPropagate()->GetDistanceAGL()*0.3048; //feet to meter
   distance = sqrt(relative_position*relative_position + alt_agl*alt_agl);
 
-  if (distance > 390){
-      tether_strength = -2.0;
+  if (distance > 10){
+      tether_strength = -20000.0;
   } else {
 	tether_strength = 0.0;
   }

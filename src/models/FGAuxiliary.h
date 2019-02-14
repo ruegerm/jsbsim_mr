@@ -248,6 +248,8 @@ public:
 
   //awesome tether
   double GetTetherForce (void) const {return tether_strength;}
+  double GetDistance3D (void) const {return distance;}
+
 
   void SetAeroPQR(const FGColumnVector3& tt) { vAeroPQR = tt; }
 
