@@ -118,7 +118,7 @@ protected:
   FGPropertyManager* PropertyManager;
 
 //awesome tether
-  FGInertial*        Inertial;
+  FGInertial* Inertial;
 };
 }
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

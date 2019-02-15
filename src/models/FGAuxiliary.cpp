@@ -229,12 +229,16 @@ bool FGAuxiliary::Run(bool Holding)
 
   // Recompute some derived values now that we know the dependent parameters values ...
   hoverbcg = in.DistanceAGL / in.Wingspan;
-
   FGColumnVector3 vMac = in.Tb2l * in.RPBody;
   hoverbmac = (in.DistanceAGL + vMac(3)) / in.Wingspan;
 
   //Awesome tether force
   CalculateRelativePosition();
+
+  cout<< "Longitutde relative position: "<<GetLongitudeRelativePosition()<<endl;
+  cout<< "GetDistanceRelativePosition: "<<GetDistanceRelativePosition()<<endl;
+
+
 
   return false;
 }
@@ -395,8 +399,14 @@ void FGAuxiliary::bind(void)
 
 void FGAuxiliary::CalculateRelativePosition(void)
 {
+  const double earth_radius_mt = 20925650.00*fttom;
 
-  const double earth_radius_mt = Inertial->GetRefRadius()*fttom;
+//  cout << "horiz. distance: " << relative_position << endl;
+//    cout << "altitude: " << alt_agl << endl;
+//    cout << "distance: " << distance << endl;
+//    cout << "tether strength: " << tether_strength << endl;
+
+
   lat_relative_position=(FDMExec->GetPropagate()->GetLatitude()  - FDMExec->GetIC()->GetLatitudeDegIC() *degtorad)*earth_radius_mt;
   lon_relative_position=(FDMExec->GetPropagate()->GetLongitude() - FDMExec->GetIC()->GetLongitudeDegIC()*degtorad)*earth_radius_mt*cosf(FDMExec->GetPropagate()->GetLatitude());
 
@@ -405,11 +415,12 @@ void FGAuxiliary::CalculateRelativePosition(void)
   alt_agl = FDMExec->GetPropagate()->GetDistanceAGL()*0.3048; //feet to meter
   distance = sqrt(relative_position*relative_position + alt_agl*alt_agl);
 
-  if (distance > 10){
-      tether_strength = -20000.0;
+  if (distance > 300){
+      tether_strength = -2.0;
   } else {
 	tether_strength = 0.0;
   }
+
 //  cout << "horiz. distance: " << relative_position << endl;
 //  cout << "altitude: " << alt_agl << endl;
 //  cout << "distance: " << distance << endl;

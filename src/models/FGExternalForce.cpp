@@ -95,7 +95,6 @@ FGParameter* FGExternalForce::bind(Element *el, const string& magName,
   Element* ydirection_element=0;
   Element* zdirection_element=0;
   FGColumnVector3 vdirection;
-//  fdmexec = fdmex;
 
   std::cout<<"\n\n\n\n\n fdmexec element: "<< fdmex<<std::endl;
   // Set frame (from FGForce).
@@ -142,6 +141,7 @@ FGParameter* FGExternalForce::bind(Element *el, const string& magName,
 //    PropertyManager->Tie( BasePropertyName + "/x",(FGExternalForce*)this, &FGExternalForce::GetX, &FGExternalForce::SetX);
     xDirection_Function = new FGFunction(fdmex, xdirection_element);
     vdirection(0) = xDirection_Function->GetValue();
+    cout <<"vdirection(0): "<< vdirection(0)<<endl;
   }
 
   ydirection_element = el->FindElement("ydirection");
@@ -151,6 +151,8 @@ FGParameter* FGExternalForce::bind(Element *el, const string& magName,
 //    PropertyManager->Tie( BasePropertyName + "/y",(FGExternalForce*)this, &FGExternalForce::GetY, &FGExternalForce::SetY);
     yDirection_Function = new FGFunction(fdmex, ydirection_element);
 	vdirection(1) = yDirection_Function->GetValue();
+//    cout <<"vdirection(1): "<< vdirection(1)<<endl;
+
   }
 
   zdirection_element = el->FindElement("zdirection");
@@ -160,9 +162,11 @@ FGParameter* FGExternalForce::bind(Element *el, const string& magName,
 //    PropertyManager->Tie( BasePropertyName + "/z",(FGExternalForce*)this, &FGExternalForce::GetZ, &FGExternalForce::SetZ);
     zDirection_Function = new FGFunction(fdmex, zdirection_element);
     vdirection(2) = zDirection_Function->GetValue()*(-1);
-//    cout << "z direction" << vDirection(eZ) << endl;
+//    cout <<"vdirection(2): "<< vdirection(2)<<endl;
+
   }
   vdirection.Normalize();
+  cout<<" vdirection vector: "<<vdirection<<endl;
   v = vdirection;
 
 
